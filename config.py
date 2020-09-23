@@ -1,6 +1,7 @@
 import configparser
 
-def db_config(filename = 'config.ini', section = 'postgresql'):
+
+def db_config(filename='config.ini', section='postgresql'):
     # create a parser
     parser = configparser.ConfigParser()
 
@@ -16,7 +17,8 @@ def db_config(filename = 'config.ini', section = 'postgresql'):
         raise Exception('Section {0} not found in the {1} file'.format(section, filename))
     return db
 
-def images_config(filename = '', section = 'staff_images'):
+
+def images_config(filename='', section='staff_images'):
     # create a parser
     parser = configparser.ConfigParser()
 

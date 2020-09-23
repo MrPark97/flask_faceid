@@ -11,6 +11,7 @@ import cameras
 import logs
 import staff
 import urllib.parse
+import entries
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
@@ -212,6 +213,8 @@ def recognize_stream(address='rtsp://admin:123@192.168.1.108:554/live', camera_i
 
 
 if __name__ == "__main__":
+
+
     database = prepare_database()
 
     all_cameras = cameras.get_all_cameras()

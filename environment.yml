@@ -52,4 +52,5 @@ dependencies:
   - zstd=1.4.5=h9ceee32_0
   - pip:
     - opencv-python==4.4.0.42
+    - psycopg2==2.8.6
 prefix: /home/mrpark/anaconda3/envs/flaskFaceid
