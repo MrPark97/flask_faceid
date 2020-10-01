@@ -79,13 +79,13 @@ def process_frame(img):
 
     for i in range(bboxes.shape[0]):
         bbox = bboxes[i, :4].astype(np.int).flatten()
-        embedding = detect_model(test_transform(faces[i]).to(device).unsqueeze(0))
+        embedding = detect_model(test_transform(faces[i]).to(device).unsqueeze(0)).squeeze().tolist()
 
         identity = who_is_it(embedding)
         if identity is None:
-            img = cv2.rectangle(img, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (0, 0, 255), 2)
+            img = cv2.rectangle(img, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (40, 40, 198), 2)
         else:
-            img = cv2.rectangle(img, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (255, 255, 255), 2)
+            img = cv2.rectangle(img, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (235, 255, 167), 2)
             img = putText(img, identity, bbox[2], bbox[3])
     return img
 
@@ -102,16 +102,16 @@ def process_last_frame(camera_id=1):
 def who_is_it(normed_embedding):
     max_sim = 0.0
     identity = None
-    for (name, normed_db_embedding) in database.items():
-        sim = np.dot(normed_db_embedding, normed_embedding)
+    for (person_id, person) in database.items():
+        sim = np.dot(person["embedding"], normed_embedding)
         if sim > max_sim:
             max_sim = sim
-            identity = name
+            identity = person["name"]
 
-    if max_sim <= 0.4:
+    if max_sim <= 0.45:
         return None
     else:
-        return str(identity)
+        return identity
 
 
 def recognize_image(input_path='content/test.jpg', output_path='test.jpg'):
@@ -142,7 +142,7 @@ def recognize_video(input_path='test2.mp4', output_path="output.mp4", height=848
     out.release()
 
 
-def recognize_stream(address='rtsp://admin:123@192.168.1.108:554/live', camera_id=1):
+def recognize_stream(address='rtsp://admin:admin123@192.168.1.108:554/live', camera_id=1):
     vs = cv2.VideoCapture(address)
 
     ret, img = vs.read()
@@ -166,6 +166,8 @@ def recognize_stream(address='rtsp://admin:123@192.168.1.108:554/live', camera_i
 
 if __name__ == "__main__":
     database = prepare_database()
+
+    print(database[2]["name"])
     recognize_stream()
 
 
